@@ -1,0 +1,94 @@
+<% layout('../layouts/boilerplate.ejs') %>
+
+<!-- edit  -->
+
+<body class="bg-light">
+  <div class="container my-5">
+    <h2 class="mb-4 fw-semibold text-center">Edit your Listing</h2>
+
+    <form action="/listing/<%= data.id %>?_method=PUT" method="POST" id="edit-form" class="p-4 rounded-4 shadow-sm bg-white needs-validation" novalidate enctype="multipart/form-data">
+      
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="<%= data.title %>" required>
+        <div class="valid-feedback">title looks good!</div>
+        <div class="invalid-feedback">please enter valid title</div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3" required><%= data.description %></textarea>
+        <div class="valid-feedback">description looks good!</div>
+        <div class="invalid-feedback">please enter description</div>
+      </div>
+
+      <!-- render image -->
+       <div class="mb-3">
+        original image <br>
+        <img src="<%= rendeImageUrl %>">
+      </div>
+
+      <!-- Image Link -->
+      <div class="mb-3">
+        <label for="image" class="form-label">upload image</label>
+        <input type="file" class="form-control" id="image" name="image[url]">
+      </div>
+
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+          <select class="form-select" id="category" name="category">
+            <option value="Trending" <%= data.category === 'Trending' ? 'selected' : '' %>>Trending</option>
+            <option value="Rooms" <%= data.category === 'Rooms' ? 'selected' : '' %>>Rooms</option>
+            <option value="Iconic cities" <%= data.category === 'Iconic cities' ? 'selected' : '' %>>Iconic Cities</option>
+            <option value="Mountains" <%= data.category === 'Mountains' ? 'selected' : '' %>>Mountains</option>
+            <option value="Castles" <%= data.category === 'Castles' ? 'selected' : '' %>>Castles</option>
+            <option value="Amazing pools" <%= data.category === 'Amazing pools' ? 'selected' : '' %>>Amazing Pools</option>
+            <option value="Camping" <%= data.category === 'Camping' ? 'selected' : '' %>>Camping</option>
+            <option value="Farms" <%= data.category === 'Farms' ? 'selected' : '' %>>Farms</option>
+            <option value="Artic" <%= data.category === 'Artic' ? 'selected' : '' %>>Arctic</option>
+            <option value="Domes" <%= data.category === 'Domes' ? 'selected' : '' %>>Domes</option>
+            <option value="Boats" <%= data.category === 'Boats' ? 'selected' : '' %>>Boats</option>
+          </select>
+      </div>
+
+      <!-- Price & Country -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="price" class="form-label">Price</label>
+          <input type="number" class="form-control" id="price" name="price" value="<%= data.price %>" required>
+          <div class="valid-feedback">price look great!</div>
+        <div class="invalid-feedback">please enter price</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="country" class="form-label">Country</label>
+          <input type="text" class="form-control" id="country" name="country" value="<%= data.country %>" required>
+           <div class="valid-feedback">valid country</div>
+        <div class="invalid-feedback">please enter valid country</div>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="mb-4">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" id="location" name="location" value="<%= data.location %>" required>
+        <div class="valid-feedback">valid location</div>
+        <div class="invalid-feedback">please enter valid location</div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" id="edit-spinner" class="btn btn-danger px-4">Edit</button>
+    </form>
+  </div>
+</body>
+
+<script>
+    let bookButton = document.getElementById("edit-spinner");
+    let edit = document.getElementById("edit-form");
+  edit.addEventListener('submit',()=>{
+    if(edit.checkValidity()){
+          bookButton.innerHTML = `Editing... <span class="spinner-border spinner-border-sm"></span>`;
+    }
+  })
+</script>

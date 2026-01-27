@@ -1,0 +1,87 @@
+<% layout('../layouts/boilerplate.ejs') %>
+
+<body class="bg-light">
+  <div class="container my-5">
+    <h2 class="mb-4 fw-semibold text-center">Create a New Listing</h2>
+
+    <form action="/listing" method="POST" id="newListing-form" class="p-4 rounded-4 shadow-sm bg-white needs-validation" novalidate enctype="multipart/form-data">
+      
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Add a catchy title" required>
+        <div class="valid-feedback">title looks good!</div>
+        <div class="invalid-feedback">please enter valid title</div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Add description" required></textarea>
+        <div class="valid-feedback">description looks good!</div>
+        <div class="invalid-feedback">please enter description</div>
+      </div>
+
+      <!-- Image Link -->
+      <div class="mb-3">
+        <label for="image" class="form-label">upload image</label>
+        <input type="file" class="form-control" id="image" name="image[url]"  required>
+      </div>
+      
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+          <select class="form-select" id="category" name="category">
+    <option value="Trending">Trending</option>
+    <option value="Rooms">Rooms</option>
+    <option value="Iconic cities">Iconic Cities</option>
+    <option value="Mountains">Mountains</option>
+    <option value="Castles">Castles</option>
+    <option value="Amazing pools">Amazing Pools</option>
+    <option value="Camping">Camping</option>
+    <option value="Farms">Farms</option>
+    <option value="Arctic">Arctic</option>
+    <option value="Domes">Domes</option>
+    <option value="Boats">Boats</option>
+          </select>
+      </div>
+
+      <!-- Price & Country -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="price" class="form-label">Price</label>
+          <input type="number" class="form-control" id="price" name="price" placeholder="1200" required>
+          <div class="valid-feedback">price look great!</div>
+        <div class="invalid-feedback">please enter price</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="country" class="form-label">Country</label>
+          <input type="text" class="form-control" id="country" name="country" placeholder="India" required>
+          <div class="valid-feedback">valid country</div>
+        <div class="invalid-feedback">please enter valid country</div>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="mb-4">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" id="location" name="location" placeholder="Jaipur, Rajasthan" required>
+        <div class="valid-feedback">valid location</div>
+        <div class="invalid-feedback">please enter valid location</div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" id="add-spinner" class="btn btn-danger px-4">Add</button>
+    </form>
+
+  </div>
+</body>
+
+<script>
+    let bookButton = document.getElementById("add-spinner");
+    let saveForm = document.getElementById("newListing-form")
+  saveForm.addEventListener('submit',()=>{
+    if(saveForm.checkValidity()){
+          bookButton.innerHTML = `Adding... <span class="spinner-border spinner-border-sm"></span>`;
+    }
+  })
+</script>

@@ -1,0 +1,105 @@
+<% layout('../layouts/boilerplate.ejs') %>
+  <!-- category -->
+   <div class="filter-wrapper">
+    <!-- LEFT ARROW -->
+  <button class="scroll-btn left" onclick="scrollFilter(-1)">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+
+     <div id="filter">
+      <div class="filter">
+        <a href="/listing/category/Trending">
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Rooms">
+        <div><i class="fa-solid fa-bed"></i></div>
+        <p>Rooms</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Iconic cities">
+        <div><i class="fa-solid fa-mountain-city"></i></div>
+        <p>Iconic cities</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Mountains">
+        <div><i class="fa-solid fa-mountain"></i></div>
+        <p>Mountains</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Castles">
+        <div><i class="fa-brands fa-fort-awesome"></i></i></div>
+        <p>Castles</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Amazing pools">
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+        <p>Amazing pools</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Camping">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Farms">
+        <div><i class="fa-solid fa-cow"></i></div>
+        <p>Farms</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Artic">
+        <div><i class="fa-solid fa-snowflake"></i></div>
+        <p>Artic</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Domes">
+        <div><i class="fa-solid fa-igloo"></i></div>
+        <p>Domes</p>
+        </a>
+      </div>
+      <div class="filter">
+        <a href="/listing/category/Boats">
+        <div><i class="fa-solid fa-anchor"></i></div>
+        <p>Boats</p>
+        </a>
+      </div>
+
+      <!-- swtich button -->
+       <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+          <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+        </div>
+       </div>
+     </div>
+     <!-- Right Arrow -->
+     <button class="scroll-btn right" onclick="scrollFilter(1)">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+   </div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 ">
+<% data.forEach(data => { %>
+  <a href="/listing/<%= data.id %>/view" class="text-linking">
+    <div class="card col" >
+  <img src="<%= data.image.url %>" class="card-img-top" alt="listing image " style = "height: 18rem;">
+  <div class="card-img-overlay"></div>
+  <div class="card-body">
+    <p class="card-text"><b><%= data.title %>.</b> <br>
+    &#8377;<%= Number(data.price).toLocaleString('en-IN') %> / night <i class="tax-info">&nbsp; &nbsp;+18%</i><br>
+    </p>
+  </div>
+</div>
+</a>
+ <% }) %>
+ </div>
