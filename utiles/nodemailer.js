@@ -12,5 +12,8 @@ const transporter = nodemailer.createTransport({
     user: process.env.nodemailer_mail ,
     pass: process.env.nodemailer_mailKey,
   },
+  tls: {
+    rejectUnauthorized: true
+  }
 });
 export {transporter};
