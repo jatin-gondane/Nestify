@@ -146,7 +146,8 @@ const enquiry =async (req,res)=>{
     let findListing = await data.findById(id).populate('owner');
     let findOwnerEmail = findListing.owner.email;
     let currentUserEmail = res.locals.existingUser.email;
-    const sendMail = await transporter.sendMail({
+    try {
+        await transporter.sendMail({
     from: currentUserEmail,
     to: findOwnerEmail,
     subject: "Hello! enquiry for your residence ",
@@ -158,6 +159,11 @@ Thank you for your time and support.
   });
   req.flash('success',`enquiry sent successfully.${findListing.owner.username} will reach you soon. please dont spam!`)
     res.redirect(`/listing/${id}/view`)
+    } catch (error) {
+      console.log('this is nodemailer listing page error', error);
+      
+    }
+   
 }
 
 export default {index,view,newListing,savenewlisting,edit,update,destroy,search,category,enquiry};
