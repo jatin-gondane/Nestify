@@ -149,7 +149,6 @@ const enquiry = async (req, res) => {
   let currentUserName = res.locals.existingUser.username;
 
   try {
-    // Create email content
     const emailContent = [
       `From: ${currentUserName} <${nodemailer_mail}>`,
       `To: ${findOwnerEmail}`,
@@ -160,14 +159,14 @@ const enquiry = async (req, res) => {
       'Thank you for your time and support.'
     ].join('\n');
 
-    // Encode email in base64
+    //Encode email 
     const encodedMessage = Buffer.from(emailContent)
       .toString('base64')
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=+$/, '');
 
-    // Send email using Gmail API
+    //Send email 
     await gmail.users.messages.send({
       userId: 'me',
       requestBody: {
