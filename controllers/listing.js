@@ -1,7 +1,7 @@
 import { data } from "../model/data.js";
 import {config, geocoding } from "@maptiler/client";
 import dotenv from 'dotenv'
-import { transporter } from "../utiles/nodemailer.js";
+import { accessToken, transporter ,refresh_token, nodemailer_mail } from "../utiles/nodemailer.js";
 import { cloudinary } from "../cloudinary.js";
 dotenv.config();
 config.apiKey= process.env.Map_Api_Key;
@@ -146,22 +146,28 @@ const enquiry =async (req,res)=>{
     let findListing = await data.findById(id).populate('owner');
     let findOwnerEmail = findListing.owner.email;
     let currentUserEmail = res.locals.existingUser.email;
+    let currentUserName = res.locals.existingUser.username;
+    
     try {
-        await transporter.sendMail({
-    from: currentUserEmail,
+         await transporter.sendMail({
+    from: `${currentUserName} 📩 ${nodemailer_mail}`,
     to: findOwnerEmail,
     subject: "Hello! enquiry for your residence ",
     text: `You have received a 📩 new enquiry from ${currentUserEmail}.
-
 This message was sent via our platform, which is currently under active development as part of a learning project.  
 Thank you for your time and support.
-`, // Plain-text version of the message
+`, 
+auth : {
+  user : nodemailer_mail,
+  refreshToken: refresh_token,
+  accessToken: accessToken,
+  expires: 1484314697598,
+}
   });
-  req.flash('success',`enquiry sent successfully.${findListing.owner.username} will reach you soon. please dont spam!`)
+  req.flash('success',`enquiry sent successfully.${findListing.owner.username} will reach you soon. please dont spam!`);
     res.redirect(`/listing/${id}/view`)
     } catch (error) {
       console.log('this is nodemailer listing page error', error);
-      
     }
    
 }
