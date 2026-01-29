@@ -1,7 +1,7 @@
 import { data } from "../model/data.js";
 import {config, geocoding } from "@maptiler/client";
 import dotenv from 'dotenv'
-import { accessToken, transporter ,refresh_token, nodemailer_mail } from "../utiles/nodemailer.js";
+ import { gmail, nodemailer_mail  } from "../utiles/googlemail.js";
 import { cloudinary } from "../cloudinary.js";
 dotenv.config();
 config.apiKey= process.env.Map_Api_Key;
@@ -141,35 +141,46 @@ const category =async (req,res)=>{
     res.render('search.ejs',{data : categoryIds})
 }
 
-const enquiry =async (req,res)=>{
-    let {id} = req.params;
-    let findListing = await data.findById(id).populate('owner');
-    let findOwnerEmail = findListing.owner.email;
-    let currentUserEmail = res.locals.existingUser.email;
-    let currentUserName = res.locals.existingUser.username;
-    
-    try {
-         await transporter.sendMail({
-    from: `${currentUserName} 📩 ${nodemailer_mail}`,
-    to: findOwnerEmail,
-    subject: "Hello! enquiry for your residence ",
-    text: `You have received a 📩 new enquiry from ${currentUserEmail}.
-This message was sent via our platform, which is currently under active development as part of a learning project.  
-Thank you for your time and support.
-`, 
-auth : {
-  user : nodemailer_mail,
-  refreshToken: refresh_token,
-  accessToken: accessToken,
-  expires: 1484314697598,
-}
-  });
-  req.flash('success',`enquiry sent successfully.${findListing.owner.username} will reach you soon. please dont spam!`);
-    res.redirect(`/listing/${id}/view`)
-    } catch (error) {
-      console.log('this is nodemailer listing page error', error);
-    }
-   
-}
+const enquiry = async (req, res) => {
+  let { id } = req.params;
+  let findListing = await data.findById(id).populate('owner');
+  let findOwnerEmail = findListing.owner.email;
+  let currentUserEmail = res.locals.existingUser.email;
+  let currentUserName = res.locals.existingUser.username;
 
+  try {
+    // Create email content
+    const emailContent = [
+      `From: ${currentUserName} <${nodemailer_mail}>`,
+      `To: ${findOwnerEmail}`,
+      `Subject: Hello! enquiry for your residence`,
+      '',
+      `You have received a 📩 new enquiry from ${currentUserEmail}.`,
+      'This message was sent via our platform, which is currently under active development as part of a learning project.',
+      'Thank you for your time and support.'
+    ].join('\n');
+
+    // Encode email in base64
+    const encodedMessage = Buffer.from(emailContent)
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+
+    // Send email using Gmail API
+    await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: {
+        raw: encodedMessage,
+      },
+    });
+
+    req.flash('success', `enquiry sent successfully. ${findListing.owner.username} will reach you soon. please dont spam!`);
+    res.redirect(`/listing/${id}/view`);
+  } catch (error) {
+    console.log('Gmail API error:', error);
+    req.flash('error', 'Failed to send enquiry. Please try again.');
+    res.redirect(`/listing/${id}/view`);
+  }
+};
 export default {index,view,newListing,savenewlisting,edit,update,destroy,search,category,enquiry};
